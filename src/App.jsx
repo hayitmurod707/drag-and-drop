@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import Double from './Double';
-import Single from './Single';
+import Horizontal from './Horizontal';
+import Vertical from './Vertical';
 import './style.css';
 import Three from './three';
 const App = () => (
@@ -9,8 +10,10 @@ const App = () => (
       <h4>
          <a href='https://github.com/hayitmurod707/drag-and-drop'>Github</a>
       </h4>
-      <h3>Ordering Single List</h3>
-      <Single />
+      <h3>Vertical list</h3>
+      <Vertical />
+      <h3>Horizontal list</h3>
+      <Horizontal />
       <h3>Ordering Double List</h3>
       <Double />
       <h3>Ordering Three List</h3>

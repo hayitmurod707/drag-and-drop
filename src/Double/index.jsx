@@ -6,7 +6,7 @@ const StyledElement = styled.div`
    align-items: center;
    display: flex;
    flex-direction: column;
-   & .view-sections-button {
+   & .view-sections {
       background-color: #5254f1;
       border-radius: 10px;
       border: none;
@@ -18,23 +18,23 @@ const StyledElement = styled.div`
       margin: 0 0 20px 0;
       padding: 0 20px;
    }
-   & .list {
+   & .sections {
       background-color: white;
       border-radius: 10px;
       padding: 8px 8px 0 8px;
       transition: 400ms;
       width: 350px;
-      &[data-dragging-over='dragging-over'] {
+      &[data-dragging-over='true'] {
          background-color: skyblue;
       }
    }
 `;
-const Two = () => {
+const Double = () => {
    const [sections, setSections] = useState([
       {
          order: 1,
          name: 'section-1',
-         childs: [
+         children: [
             {
                order: 1,
                name: 'lesson-1-1',
@@ -48,7 +48,7 @@ const Two = () => {
       {
          order: 2,
          name: 'section-2',
-         childs: [
+         children: [
             {
                order: 1,
                name: 'lesson-2-1',
@@ -57,16 +57,12 @@ const Two = () => {
                order: 2,
                name: 'lesson-2-2',
             },
-            {
-               order: 3,
-               name: 'lesson-2-3',
-            },
          ],
       },
       {
          order: 3,
          name: 'section-3',
-         childs: [
+         children: [
             {
                order: 1,
                name: 'lesson-3-1',
@@ -75,124 +71,122 @@ const Two = () => {
                order: 2,
                name: 'lesson-3-2',
             },
-            {
-               order: 3,
-               name: 'lesson-3-4',
-            },
-         ],
-      },
-      {
-         order: 4,
-         name: 'section-4',
-         childs: [
-            {
-               order: 1,
-               name: 'lesson-4-1',
-            },
-         ],
-      },
-      {
-         order: 5,
-         name: 'section-5',
-         childs: [
-            {
-               order: 1,
-               name: 'lesson-5-1',
-            },
-            {
-               order: 2,
-               name: 'lesson-5-2',
-            },
          ],
       },
    ]);
-   const onDragEnd = ({ destination, source, type }) => {
-      const { index: startIndex, droppableId: sourceId } = source;
+   const checkArray = array => (Array.isArray(array) ? array : []);
+   const checkedSections = checkArray(sections);
+   const onDragEnd = params => {
+      const source = params?.source;
+      const destination = params?.destination;
+      const type = params?.type;
+      const sourceIndex = source?.index;
+      const sourceId = parseInt(source?.droppableId);
+      const destinationIndex = destination?.index;
+      const destinationId = parseInt(destination?.droppableId);
       if (
          !destination ||
-         (destination?.index === startIndex &&
-            destination?.droppableId === sourceId)
+         (destinationIndex === sourceIndex && destinationId === sourceId)
       ) {
          return;
       } else {
-         const { index: endIndex, droppableId: destinationId } = destination;
-         let list;
-         if (type === 'sections') {
-            const currentSection = sections[startIndex];
-            list =
-               startIndex > endIndex
+         let newSections = checkedSections;
+         if (type === 'section') {
+            const currentSection = checkedSections[sourceIndex];
+            newSections =
+               sourceIndex > destinationIndex
                   ? [
-                       ...sections?.slice(0, endIndex),
+                       ...checkedSections.slice(0, destinationIndex),
                        currentSection,
-                       ...sections?.slice(endIndex, startIndex),
-                       ...sections?.slice(startIndex + 1),
+                       ...checkedSections.slice(destinationIndex, sourceIndex),
+                       ...checkedSections.slice(sourceIndex + 1),
                     ]
                   : [
-                       ...sections?.slice(0, startIndex),
-                       ...sections?.slice(startIndex + 1, endIndex + 1),
+                       ...checkedSections.slice(0, sourceIndex),
+                       ...checkedSections.slice(
+                          sourceIndex + 1,
+                          destinationIndex + 1
+                       ),
                        currentSection,
-                       ...sections?.slice(endIndex + 1),
+                       ...checkedSections.slice(destinationIndex + 1),
                     ];
          } else {
-            const nextSection = sections[parseInt(destinationId)]?.childs;
-            const previousSection = sections[parseInt(sourceId)]?.childs;
-            const currentLesson = previousSection[startIndex];
-            const previousLessons = previousSection?.filter(
-               (section, index) => index !== startIndex
+            const destinationSectionChildren = checkArray(
+               checkedSections[destinationId]?.children
             );
-            const lessons1 = nextSection?.slice(0, endIndex);
-            const lessons2 = nextSection?.slice(endIndex);
-            const nextLessons =
+            const sourceSectionChildren = checkArray(
+               checkedSections[sourceId]?.children
+            );
+            const currentSubSection = sourceSectionChildren[sourceIndex];
+            const sourceChildren = sourceSectionChildren.filter(
+               (section, index) => index !== sourceIndex
+            );
+            const destinationChildren =
                destinationId === sourceId
-                  ? startIndex > endIndex
+                  ? sourceIndex > destinationIndex
                      ? [
-                          ...lessons1,
-                          currentLesson,
-                          ...nextSection?.slice(endIndex, startIndex),
-                          ...nextSection?.slice(startIndex + 1),
+                          ...destinationSectionChildren.slice(
+                             0,
+                             destinationIndex
+                          ),
+                          currentSubSection,
+                          ...destinationSectionChildren.slice(
+                             destinationIndex,
+                             sourceIndex
+                          ),
+                          ...destinationSectionChildren.slice(sourceIndex + 1),
                        ]
                      : [
-                          ...nextSection?.slice(0, startIndex),
-                          ...nextSection?.slice(startIndex + 1, endIndex + 1),
-                          currentLesson,
-                          ...nextSection?.slice(endIndex + 1),
+                          ...destinationSectionChildren.slice(0, sourceIndex),
+                          ...destinationSectionChildren.slice(
+                             sourceIndex + 1,
+                             destinationIndex + 1
+                          ),
+                          currentSubSection,
+                          ...destinationSectionChildren.slice(
+                             destinationIndex + 1
+                          ),
                        ]
-                  : [...lessons1, currentLesson, ...lessons2];
-            list = sections?.map((section, index) => {
-               if (index === parseInt(destinationId)) {
-                  return { ...section, childs: nextLessons };
-               } else if (index === parseInt(sourceId)) {
-                  return { ...section, childs: previousLessons };
+                  : [
+                       ...destinationSectionChildren.slice(0, destinationIndex),
+                       currentSubSection,
+                       ...destinationSectionChildren.slice(destinationIndex),
+                    ];
+            newSections = checkedSections.map((section, index) => {
+               if (index === destinationId) {
+                  return { ...section, children: destinationChildren };
+               } else if (index === sourceId) {
+                  return { ...section, children: sourceChildren };
                } else {
                   return section;
                }
             });
          }
-         setSections(list);
+         setSections(newSections);
       }
    };
-   const parseOrder = () => {
-      const section = sections?.map((section, index) => {
+   const ordering = () => {
+      const sections = checkedSections.map((section, index) => {
          const order = index + 1;
-         const childs = section?.childs?.map((child, index) => {
-            const order = index + 1;
-            return { ...child, order: order };
-         });
-         const newItem = { ...section, order, childs };
-         return newItem;
+         const children = checkArray(section?.children).map((child, index) => ({
+            ...child,
+            order: index + 1,
+         }));
+         const newSection = { ...section, order, children };
+         return newSection;
       });
-      console.log(section);
+      console.log(sections);
    };
    return (
       <StyledElement>
-         <button className='view-sections-button' onClick={parseOrder}>
-            View sections
+         <button className='view-sections' onClick={ordering}>
+            Ordering
          </button>
          <DragDropContext onDragEnd={onDragEnd}>
             <Droppable
                direction='vertical'
-               droppableId='all-columns'
-               type='sections'
+               droppableId='section'
+               type='section'
             >
                {(
                   { innerRef, droppableProps, placeholder },
@@ -200,15 +194,17 @@ const Two = () => {
                ) => (
                   <div
                      {...droppableProps}
-                     className='list'
-                     data-dragging-over={isDraggingOver ? 'dragging-over' : ''}
+                     className='sections'
+                     data-dragging-over={isDraggingOver}
                      ref={innerRef}
                   >
-                     {(Array.isArray(sections) ? sections : []).map(
-                        (section, index) => (
-                           <Section {...section} index={index} key={index} />
-                        )
-                     )}
+                     {checkedSections.map((section, index) => (
+                        <Section
+                           {...section}
+                           key={index}
+                           sectionIndex={index}
+                        />
+                     ))}
                      {placeholder}
                   </div>
                )}
@@ -217,4 +213,4 @@ const Two = () => {
       </StyledElement>
    );
 };
-export default Two;
+export default Double;
