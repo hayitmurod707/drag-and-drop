@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/drag-and-drop/static/css/main.86e5af8a.css",
+    "main.js": "/drag-and-drop/static/js/main.cf7bcc6b.js",
+    "static/media/Gilroy-Medium.woff2": "/drag-and-drop/static/media/Gilroy-Medium.e2130cf5bbb93f1cc9e0.woff2",
+    "static/media/burger-menu.svg": "/drag-and-drop/static/media/burger-menu.dd5a39f629df2a8ac5237508396f2480.svg",
+    "index.html": "/drag-and-drop/index.html",
+    "main.86e5af8a.css.map": "/drag-and-drop/static/css/main.86e5af8a.css.map",
+    "main.cf7bcc6b.js.map": "/drag-and-drop/static/js/main.cf7bcc6b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.86e5af8a.css",
+    "static/js/main.cf7bcc6b.js"
+  ]
+}
