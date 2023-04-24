@@ -22,24 +22,19 @@ export const StyledElement = styled.div`
 const Single = () => {
    const [sections, setSections] = useState([
       {
-         order: 1,
-         name: 'section-1',
+         name: 'Section 1',
       },
       {
-         order: 2,
-         name: 'section-2',
+         name: 'Section 2',
       },
       {
-         order: 3,
-         name: 'section-3',
+         name: 'Section 3',
       },
       {
-         order: 4,
-         name: 'section-4',
+         name: 'Section 4',
       },
       {
-         order: 5,
-         name: 'section-5',
+         name: 'Section 5',
       },
    ]);
    const checkedSections = Array.isArray(sections) ? sections : [];
@@ -49,7 +44,7 @@ const Single = () => {
       const destinationIndex = destination?.index;
       if (destination) {
          const currentSection = checkedSections[sourceIndex];
-         const newSections =
+         const sections =
             sourceIndex > destinationIndex
                ? [
                     ...checkedSections.slice(0, destinationIndex),
@@ -66,7 +61,7 @@ const Single = () => {
                     currentSection,
                     ...checkedSections.slice(destinationIndex + 1),
                  ];
-         setSections(newSections);
+         setSections(sections);
       }
    };
    return (

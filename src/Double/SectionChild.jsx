@@ -49,12 +49,11 @@ const SectionChild = ({ sectionIndex, index, name }) => (
       {({ innerRef, draggableProps, dragHandleProps }, { isDragging }) => (
          <StyledElement
             {...draggableProps}
-            {...dragHandleProps}
             data-dragging={isDragging}
             id={`${sectionIndex}-${index}`}
             ref={innerRef}
          >
-            <div className='handle'>
+            <div className='handle' {...dragHandleProps}>
                <HandleIcon />
             </div>
             <div className='section-child-name'>{name}</div>

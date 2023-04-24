@@ -41,12 +41,11 @@ const Section = ({ name, index, isDraggingOver }) => (
       {({ innerRef, draggableProps, dragHandleProps }, { isDragging }) => (
          <StyledElement
             {...draggableProps}
-            {...dragHandleProps}
             data-dragging-over={isDraggingOver}
             data-dragging={isDragging}
             ref={innerRef}
          >
-            <div className='handle'>
+            <div className='handle' {...dragHandleProps}>
                <HandleIcon />
             </div>
             <div className='name'>{name}</div>

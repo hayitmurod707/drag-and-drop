@@ -59,12 +59,8 @@ const Section = ({ sectionIndex, name, children }) => (
             data-dragging={isDragging}
             ref={innerRef}
          >
-            <div
-               {...dragHandleProps}
-               className='section'
-               data-has-children={children?.length > 0}
-            >
-               <div className='handle'>
+            <div className='section' data-has-children={children?.length > 0}>
+               <div className='handle' {...dragHandleProps}>
                   <HandleIcon />
                </div>
                <div className='name'>{name}</div>

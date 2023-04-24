@@ -8,9 +8,9 @@ export const StyledElement = styled.div`
    & .sections {
       background-color: white;
       border-radius: 12px;
+      display: flex;
       padding: 8px 8px 8px 0;
       transition: 400ms;
-      display: flex;
       &[data-dragging-over='true'] {
          background-color: skyblue;
       }
@@ -19,24 +19,19 @@ export const StyledElement = styled.div`
 const Horizontal = () => {
    const [sections, setSections] = useState([
       {
-         order: 1,
-         name: 'section-1',
+         name: 'Section 1',
       },
       {
-         order: 2,
-         name: 'section-2',
+         name: 'Section 2',
       },
       {
-         order: 3,
-         name: 'section-3',
+         name: 'Section 3',
       },
       {
-         order: 4,
-         name: 'section-4',
+         name: 'Section 4',
       },
       {
-         order: 5,
-         name: 'section-5',
+         name: 'Section 5',
       },
    ]);
    const checkedSections = Array.isArray(sections) ? sections : [];
@@ -46,7 +41,7 @@ const Horizontal = () => {
       const destinationIndex = destination?.index;
       if (destination) {
          const currentSection = checkedSections[sourceIndex];
-         const newSections =
+         const sections =
             sourceIndex > destinationIndex
                ? [
                     ...checkedSections.slice(0, destinationIndex),
@@ -63,7 +58,7 @@ const Horizontal = () => {
                     currentSection,
                     ...checkedSections.slice(destinationIndex + 1),
                  ];
-         setSections(newSections);
+         setSections(sections);
       }
    };
    return (

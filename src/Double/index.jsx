@@ -6,18 +6,6 @@ const StyledElement = styled.div`
    align-items: center;
    display: flex;
    flex-direction: column;
-   & .view-sections {
-      background-color: #5254f1;
-      border-radius: 10px;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 500;
-      height: 40px;
-      margin: 0 0 20px 0;
-      padding: 0 20px;
-   }
    & .sections {
       background-color: white;
       border-radius: 10px;
@@ -32,44 +20,35 @@ const StyledElement = styled.div`
 const Double = () => {
    const [sections, setSections] = useState([
       {
-         order: 1,
-         name: 'section-1',
+         name: 'Section 1',
          children: [
             {
-               order: 1,
-               name: 'lesson-1-1',
+               name: 'Section child 1 1',
             },
             {
-               order: 2,
-               name: 'lesson-1-2',
+               name: 'Section child 1 2',
             },
          ],
       },
       {
-         order: 2,
-         name: 'section-2',
+         name: 'Section 2',
          children: [
             {
-               order: 1,
-               name: 'lesson-2-1',
+               name: 'Section child 2 1',
             },
             {
-               order: 2,
-               name: 'lesson-2-2',
+               name: 'Section child 2 2',
             },
          ],
       },
       {
-         order: 3,
-         name: 'section-3',
+         name: 'Section 3',
          children: [
             {
-               order: 1,
-               name: 'lesson-3-1',
+               name: 'Section child 3 1',
             },
             {
-               order: 2,
-               name: 'lesson-3-2',
+               name: 'Section child 3 2',
             },
          ],
       },
@@ -90,10 +69,10 @@ const Double = () => {
       ) {
          return;
       } else {
-         let newSections = checkedSections;
+         let sections = checkedSections;
          if (type === 'section') {
             const currentSection = checkedSections[sourceIndex];
-            newSections =
+            sections =
                sourceIndex > destinationIndex
                   ? [
                        ...checkedSections.slice(0, destinationIndex),
@@ -152,7 +131,7 @@ const Double = () => {
                        currentSubSection,
                        ...destinationSectionChildren.slice(destinationIndex),
                     ];
-            newSections = checkedSections.map((section, index) => {
+            sections = checkedSections.map((section, index) => {
                if (index === destinationId) {
                   return { ...section, children: destinationChildren };
                } else if (index === sourceId) {
@@ -162,26 +141,11 @@ const Double = () => {
                }
             });
          }
-         setSections(newSections);
+         setSections(sections);
       }
-   };
-   const ordering = () => {
-      const sections = checkedSections.map((section, index) => {
-         const order = index + 1;
-         const children = checkArray(section?.children).map((child, index) => ({
-            ...child,
-            order: index + 1,
-         }));
-         const newSection = { ...section, order, children };
-         return newSection;
-      });
-      console.log(sections);
    };
    return (
       <StyledElement>
-         <button className='view-sections' onClick={ordering}>
-            Ordering
-         </button>
          <DragDropContext onDragEnd={onDragEnd}>
             <Droppable
                direction='vertical'
